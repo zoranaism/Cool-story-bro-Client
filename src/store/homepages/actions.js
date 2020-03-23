@@ -1,4 +1,4 @@
-import { apiUrl } from '../../config/constants';
+import { apiUrl } from '../../config/constants'
 import axios from 'axios'
 
 export const getHomePagesThunk = () => {

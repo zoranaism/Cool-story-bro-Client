@@ -94,6 +94,8 @@ export const getUserWithStoredToken = () => {
       });
 
       // token is still valid
+      // console.log("This is the me data", response.data.user);
+      
       dispatch(tokenStillValid(response.data));
       dispatch(appDoneLoading());
     } catch (error) {

@@ -2,10 +2,10 @@ import React, { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { getHomePagesThunk } from "../../store/homepages/actions";
 import HomePageCard from "../../components/HomePageCard/index";
+import { selectHomePages } from "../../store/homepages/selectors";
 
 import { Jumbotron } from "react-bootstrap";
 import Container from "react-bootstrap/Container";
-import { selectHomePages } from "../../store/homepages/selectors";
 
 export default function HomePagesList() {
   const dispatch = useDispatch();
