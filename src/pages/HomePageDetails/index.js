@@ -3,18 +3,20 @@ import { useParams } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import { fetchHomePageById } from "../../store/homepageDetails/actions";
 import { selectHomePageDetails } from "../../store/homepageDetails/selectors";
+import StoryCarousel from "../../components/StoryCarousel";
+
 import { Jumbotron } from "react-bootstrap";
 import Container from "react-bootstrap/Container";
 // import { Link } from "react-router-dom";
 // import { FaGithub } from "react-icons/fa";
 
 export default function HomePageDetails() {
-  const dispatch = useDispatch();
   const { id } = useParams();
   const homepage = useSelector(selectHomePageDetails);
+  const dispatch = useDispatch();
 
-  console.log("homepage ID", id);
-  console.log("homepage", homepage);
+  // console.log("homepage ID", id);
+  // console.log("homepage", homepage);
 
   useEffect(() => {
     dispatch(fetchHomePageById(id));
@@ -33,8 +35,8 @@ export default function HomePageDetails() {
         <h2>{homepage.title}</h2>
         <h4>{homepage.description}</h4>
       </Jumbotron>
-      <Container>
-        
+      <Container className="mb-5 pb-5">
+        <StoryCarousel homepage={homepage} />
       </Container>
     </div>
   );

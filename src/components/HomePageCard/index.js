@@ -5,7 +5,7 @@ import { Link } from "react-router-dom";
 
 export default function HomePageCard(props) {
   return (
-    <Card style={{ color: props.color, backgroundColor: props.backgroundColor}}>
+    <Card className="mb-2" style={{ color: props.color, backgroundColor: props.backgroundColor}}>
       <Card.Body>
         <Card.Title>
           {props.title}

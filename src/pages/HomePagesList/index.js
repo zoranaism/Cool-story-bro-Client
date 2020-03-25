@@ -20,7 +20,7 @@ export default function HomePagesList() {
       <Jumbotron>
         <h1>Homepages</h1>
       </Jumbotron>
-      <Container>
+      <Container className="mb-5 pb-5">
         {homepages.map(homepage => {
           return (
             <HomePageCard
