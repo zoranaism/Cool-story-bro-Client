@@ -12,7 +12,7 @@ function homepageFetchedSuccess(homepage) {
 export function fetchHomePageById(id) {
   return async function(dispatch, getState) {
     const response = await axios.get(`${apiUrl}/homepages/${id}`);
-    // console.log(response);
+    console.log("Homepage details store", response);
 
     dispatch(homepageFetchedSuccess(response.data));
   };

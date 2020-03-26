@@ -3,7 +3,8 @@ import {
   LOGIN_SUCCESS,
   TOKEN_STILL_VALID,
   HOMEPAGE_UPDATED,
-  STORY_POST_SUCCESS
+  STORY_POST_SUCCESS, 
+  STORY_DELETE_SUCCESS
 } from "./actions";
 
 const initialState = {
@@ -38,6 +39,17 @@ export default (state = initialState, action) => {
         homepage: {
           ...state.homepage,
           stories: [...state.homepage.stories, action.payload]
+        }
+      };
+
+    case STORY_DELETE_SUCCESS: 
+      const storyId = action.payload;
+      const newStories = state.homepage.stories.filter(story => story.id !== storyId );
+      return{
+        ...state, 
+        homepage: {
+          ...state.homepage, 
+          stories: newStories
         }
       };
 

@@ -13,6 +13,7 @@ export const TOKEN_STILL_VALID = "TOKEN_STILL_VALID";
 export const LOG_OUT = "LOG_OUT";
 export const HOMEPAGE_UPDATED = "HOMEPAGE_UPDATED";
 export const STORY_POST_SUCCESS = "STORY_POST_SUCCESS";
+export const STORY_DELETE_SUCCESS = "STORY_DELETE_SUCCESS";
 
 const loginSuccess = userWithToken => {
   return {
@@ -36,6 +37,11 @@ export const homepageUpdated = homepage => ({
 export const storyPostSuccess = story => ({
   type: STORY_POST_SUCCESS,
   payload: story
+});
+
+export const storyDeleteSuccess = storyId => ({
+  type: STORY_DELETE_SUCCESS,
+  payload: storyId
 });
 
 export const signUp = (name, email, password) => {
@@ -107,7 +113,7 @@ export const getUserWithStoredToken = () => {
 
       // token is still valid
       // console.log("This is the me data", response.data);
-      
+
       dispatch(tokenStillValid(response.data));
       dispatch(appDoneLoading());
     } catch (error) {
@@ -131,32 +137,40 @@ export const updateMyPage = (title, description, backgroundColor, color) => {
 
     // console.log("get state homepage and token here in the thunk", homepage, token);
     // console.log("props in the thunk", title, description, backgroundColor, color);
+    try {
 
-    const response = await axios.patch(
-      `${apiUrl}/homepages/${homepage.id}`,
-      {
-        title,
-        description,
-        backgroundColor,
-        color
-      },
-      {
-        headers: {
-          Authorization: `Bearer ${token}`
+      const response = await axios.patch(
+        `${apiUrl}/homepages/${homepage.id}`,
+        {
+          title,
+          description,
+          backgroundColor,
+          color
+        },
+        {
+          headers: {
+            Authorization: `Bearer ${token}`
+          }
         }
+      );
+
+      // console.log("response here in the thunk", response);
+      dispatch(
+        showMessageWithTimeout("success", false, "update successfull", 3000)
+      );
+      dispatch(homepageUpdated(response.data.homepage));
+      dispatch(appDoneLoading());
+    } catch (error) {
+      
+      if (error.response) {
+        console.log(error.response.message);
+      } else {
+        console.log(error);
       }
-    );
-
-    // console.log("response here in the thunk", response);
-
-    dispatch(
-      showMessageWithTimeout("success", false, "update successfull", 3000)
-    );
-    dispatch(homepageUpdated(response.data.homepage));
-    dispatch(appDoneLoading());
+      dispatch(appDoneLoading());
+    }
   };
 };
-
 
 export const postStory = (name, content, imageUrl) => {
   return async (dispatch, getState) => {
@@ -164,25 +178,67 @@ export const postStory = (name, content, imageUrl) => {
     // console.log(name, content, imageUrl);
     dispatch(appLoading());
 
-    const response = await axios.post(
-      `${apiUrl}/homepages/${homepage.id}/stories`,
-      {
-        name,
-        content,
-        imageUrl
-      },
-      {
-        headers: {
-          Authorization: `Bearer ${token}`
+    try {
+      const response = await axios.post(
+        `${apiUrl}/homepages/${homepage.id}/stories`,
+        {
+          name,
+          content,
+          imageUrl
+        },
+        {
+          headers: {
+            Authorization: `Bearer ${token}`
+          }
         }
-      }
-    );
+      );
 
-    console.log("Yep!", response);
-    dispatch(
-      showMessageWithTimeout("success", false, response.data.message, 3000)
-    );
-    dispatch(storyPostSuccess(response.data.story));
-    dispatch(appDoneLoading());
+      // console.log("Yep!", response);
+      dispatch(
+        showMessageWithTimeout("success", false, response.data.message, 3000)
+      );
+      dispatch(storyPostSuccess(response.data.story));
+      dispatch(appDoneLoading());
+    } catch (error) {
+      if (error.response) {
+        console.log(error.response.message);
+      } else {
+        console.log(error);
+      }
+      dispatch(appDoneLoading());
+    }
+  };
+};
+
+export const deleteStory = storyId => {
+  return async (dispatch, getState) => {
+    dispatch(appLoading());
+    const { homepage, token } = selectUser(getState());
+    const homepageId = homepage.id;
+
+    try {
+      const response = await axios.delete(
+        `${apiUrl}/homepages/${homepageId}/stories/${storyId}`,
+        {
+          headers: {
+            Authorization: `Bearer ${token}`
+          }
+        }
+      );
+
+      // console.log("this is the delete response", response.data);
+      dispatch(
+        showMessageWithTimeout("success", false, response.data.message, 3000)
+      );
+      dispatch(storyDeleteSuccess(storyId));
+      dispatch(appDoneLoading());
+    } catch (error) {
+      if (error.response) {
+        console.log(error.response.message);
+      } else {
+        console.log(error);
+      }
+      dispatch(appDoneLoading());
+    }
   };
 };

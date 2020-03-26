@@ -1,7 +1,18 @@
 import React from "react";
 import Carousel from "react-bootstrap/Carousel";
+import Button from "react-bootstrap/Button";
+import { useDispatch } from "react-redux";
+import { deleteStory } from "../../store/user/actions";
 
 export default function StoryCarousel(props) {
+  const dispatch = useDispatch();
+
+  const onDelete = storyId => {
+    // console.log("deleting story!", id);
+    
+    dispatch(deleteStory(storyId));
+  }
+  
   return (
     <Carousel className="mt-5 mb-5">
       {props.homepage.stories.map(story => {
@@ -23,6 +34,9 @@ export default function StoryCarousel(props) {
             >
               <h3>{story.name}</h3>
               <p>{story.content}</p>
+              <Button variant="danger" type="submit" onClick={() => onDelete(story.id)}>
+                Delete Story
+              </Button>
             </Carousel.Caption>
           </Carousel.Item>
         );
