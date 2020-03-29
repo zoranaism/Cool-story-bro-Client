@@ -138,7 +138,6 @@ export const updateMyPage = (title, description, backgroundColor, color) => {
     // console.log("get state homepage and token here in the thunk", homepage, token);
     // console.log("props in the thunk", title, description, backgroundColor, color);
     try {
-
       const response = await axios.patch(
         `${apiUrl}/homepages/${homepage.id}`,
         {
@@ -161,7 +160,6 @@ export const updateMyPage = (title, description, backgroundColor, color) => {
       dispatch(homepageUpdated(response.data.homepage));
       dispatch(appDoneLoading());
     } catch (error) {
-      
       if (error.response) {
         console.log(error.response.message);
       } else {
@@ -231,6 +229,36 @@ export const deleteStory = storyId => {
         showMessageWithTimeout("success", false, response.data.message, 3000)
       );
       dispatch(storyDeleteSuccess(storyId));
+      dispatch(appDoneLoading());
+    } catch (error) {
+      if (error.response) {
+        console.log(error.response.message);
+      } else {
+        console.log(error);
+      }
+      dispatch(appDoneLoading());
+    }
+  };
+};
+
+export const likeStory = storyId => {
+  return async (dispatch, getState) => {
+    dispatch(appLoading());
+    const { token } = selectUser(getState());
+
+    try {
+      const response = await axios.post(
+        `${apiUrl}/homepages/stories/${storyId}/like`,
+        {},
+        {
+          headers: {
+            Authorization: `Bearer ${token}`
+          }
+        }
+      );
+
+      console.log("this is the response", response);
+      dispatch(getUserWithStoredToken())
       dispatch(appDoneLoading());
     } catch (error) {
       if (error.response) {

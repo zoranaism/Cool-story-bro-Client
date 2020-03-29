@@ -13,6 +13,7 @@ export default function MyHomepageForm() {
   const [imageUrl, setImageUrl] = useState(
     "https://source.unsplash.com/1600x900/?"
   );
+  const [openStory, setOpenStory] = useState();
 
   function submitForm(event) {
     event.preventDefault();
@@ -60,7 +61,7 @@ export default function MyHomepageForm() {
       </Form.Group>
 
       <Form.Group className="mt-5">
-        <Button variant="primary" type="submit" onClick={submitForm}>
+        <Button variant="primary" type="submit" onClick={submitForm} >
           Post!
         </Button>
       </Form.Group>

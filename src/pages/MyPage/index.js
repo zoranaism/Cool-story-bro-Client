@@ -25,7 +25,6 @@ export default function MyPage() {
     history.push("/");
   }
 
-
   if (homepage === null) {
     return <Loading />;
   }
